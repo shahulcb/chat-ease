@@ -1,16 +1,66 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth"
+import { auth, db } from '../firebase/config'
+import { doc, setDoc } from "firebase/firestore"
+import Loading from '../components/Loading'
+import VerifyEmail from '../components/VerifyEmail'
 
 function Signup() {
+    const navigate = useNavigate()
+    const [inputs, setInputs] = useState({})
+    const [loading, setLoading] = useState(false)
+    const [emailSend, setEmailSend] = useState(false)
+    const handleInputs = (event) => {
+        setInputs(prev => ({
+            ...prev,
+            [event.target.name]: event.target.value
+        }))
+    }
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        try {
+            setLoading(true)
+            const userCredential = await createUserWithEmailAndPassword(auth, inputs.email, inputs.password)
+            await updateProfile(userCredential.user, {
+                displayName: inputs.name
+            })
+            await setDoc(doc(db, "users", userCredential.user.uid), {
+                uid: userCredential.user.uid,
+                displayName: inputs.name,
+                email: inputs.email,
+            })
+            await sendEmailVerification(auth.currentUser)
+            setEmailSend(true)
+            let intervel = setInterval(async () => {
+                if (userCredential.user.emailVerified) {
+                    clearInterval(intervel)
+                    navigate("/")
+                }
+                await userCredential.user.reload()
+            }, 2000);
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage);
+            setInputs({})
+            setLoading(false)
+            setEmailSend(false)
+        }
+    }
     return (
+
         <div className='w-full h-screen flex items-center justify-center'>
+            {loading && <Loading />}
+            {emailSend && <VerifyEmail />}
             <div className='max-w-md p-5 flex flex-col gap-5 text-center'>
                 <h1 className='text-3xl'>Super Chat</h1>
                 <p className='text-base'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, numquam.</p>
-                <form action="" className='flex flex-col gap-5'>
-                    <input type="text" placeholder="Name" className="input input-bordered input-md w-full" />
-                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full" />
-                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full" />
-                    <button className="btn">Sign in</button>
+                <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
+                    <input type="text" placeholder="Name" className="input input-bordered input-md w-full" name='name' value={inputs.name || ""} onChange={handleInputs} />
+                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full" name='email' value={inputs.email || ""} onChange={handleInputs} />
+                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full" name='password' value={inputs.password || ""} onChange={handleInputs} />
+                    <button className="btn">Sign up</button>
                 </form>
                 <div className='flex gap-5 justify-center'>
                     <svg
@@ -27,7 +77,7 @@ function Signup() {
                         />
                     </svg>
                 </div>
-                <p>You do have an account? Login</p>
+                <p>You do have an account? <Link to={"/login"} className='text-blue-800 font-semibold'>Login</Link></p>
             </div>
         </div>
     )

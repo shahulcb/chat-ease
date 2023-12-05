@@ -6,7 +6,7 @@ function Chats() {
             <div className='flex gap-5 p-3 items-center hover:bg-base-200 cursor-pointer rounded-md'>
                 <div className="avatar">
                     <div className="w-12 rounded-full">
-                        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt='' />
                     </div>
                 </div>
                 <div>
@@ -17,7 +17,7 @@ function Chats() {
             <div className='flex gap-5 p-3 items-center hover:bg-base-200 cursor-pointer rounded-md'>
                 <div className="avatar">
                     <div className="w-12 rounded-full">
-                        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt='' />
                     </div>
                 </div>
                 <div>

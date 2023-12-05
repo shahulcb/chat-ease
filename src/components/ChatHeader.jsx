@@ -39,8 +39,8 @@ function ChatHeader() {
                         <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
                     </svg>
                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52 mt-7">
-                        <li><a>Item 1</a></li>
-                        <li><a>Item 2</a></li>
+                        <li><a href>Item 1</a></li>
+                        <li><a href>Item 2</a></li>
                     </ul>
                 </div>
 

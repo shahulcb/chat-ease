@@ -1,14 +1,61 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from '../firebase/config'
+import Loading from '../components/Loading'
+import VerifyEmail from '../components/VerifyEmail'
+
+
 
 function Login() {
+    const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
+    const [emailSend, setEmailSend] = useState(false)
+    const [inputs, setInputs] = useState({})
+    const handleInputs = (event) => {
+        setInputs(prev => ({
+            ...prev,
+            [event.target.name]: event.target.value
+        }))
+    }
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        try {
+            setLoading(true)
+            const userCredential = await signInWithEmailAndPassword(auth, inputs.email, inputs.password)
+
+            if (!userCredential.user.emailVerified) {
+                await sendEmailVerification(userCredential.user)
+                setEmailSend(true)
+                let intervel = setInterval(async () => {
+                    if (userCredential.user.emailVerified) {
+                        clearInterval(intervel)
+                        navigate("/")
+                    }
+                    await userCredential.user.reload()
+                }, 2000);
+            } else {
+                navigate("/")
+            }
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage);
+            setInputs({})
+            setLoading(false)
+            setEmailSend(false)
+        }
+    }
     return (
         <div className='w-full h-screen flex items-center justify-center'>
+            {loading && <Loading />}
+            {emailSend && <VerifyEmail />}
             <div className='max-w-md p-5 flex flex-col gap-5 text-center'>
                 <h1 className='text-3xl'>Super Chat</h1>
                 <p className='text-base'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, numquam.</p>
-                <form action="" className='flex flex-col gap-5'>
-                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full" />
-                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full" />
+                <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
+                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full" name='email' value={inputs.email || ""} onChange={handleInputs} />
+                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full" name='password' value={inputs.password || ""} onChange={handleInputs} />
                     <button className="btn">Login</button>
                 </form>
                 <div className='flex gap-5 justify-center'>
@@ -26,7 +73,7 @@ function Login() {
                         />
                     </svg>
                 </div>
-                <p>You dont have an account? Sign in</p>
+                <p>You dont have an account? <Link to={"/signup"} className='text-blue-800 font-semibold'>Sign up</Link></p>
             </div>
         </div>
     )
