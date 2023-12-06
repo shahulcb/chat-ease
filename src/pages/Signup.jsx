@@ -5,12 +5,17 @@ import { auth, db } from '../firebase/config'
 import { doc, setDoc } from "firebase/firestore"
 import Loading from '../components/Loading'
 import VerifyEmail from '../components/VerifyEmail'
+import Alert from '../components/Alert'
+import { storage } from '../firebase/config'
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 function Signup() {
     const navigate = useNavigate()
     const [inputs, setInputs] = useState({})
+    const [file, setFile] = useState(null)
     const [loading, setLoading] = useState(false)
     const [emailSend, setEmailSend] = useState(false)
+    const [error, setError] = useState('')
     const handleInputs = (event) => {
         setInputs(prev => ({
             ...prev,
@@ -22,13 +27,18 @@ function Signup() {
         try {
             setLoading(true)
             const userCredential = await createUserWithEmailAndPassword(auth, inputs.email, inputs.password)
+            const storageRef = ref(storage, userCredential.user.uid)
+            const uploadTask = await uploadBytes(storageRef, file)
+            const downloadURL = await getDownloadURL(uploadTask.ref)
             await updateProfile(userCredential.user, {
-                displayName: inputs.name
+                displayName: inputs.name,
+                photoURL: downloadURL
             })
             await setDoc(doc(db, "users", userCredential.user.uid), {
                 uid: userCredential.user.uid,
                 displayName: inputs.name,
                 email: inputs.email,
+                photoURL: downloadURL
             })
             await sendEmailVerification(auth.currentUser)
             setEmailSend(true)
@@ -46,6 +56,8 @@ function Signup() {
             setInputs({})
             setLoading(false)
             setEmailSend(false)
+            setError(errorMessage)
+            setFile(null)
         }
     }
     return (
@@ -53,13 +65,33 @@ function Signup() {
         <div className='w-full h-screen flex items-center justify-center'>
             {loading && <Loading />}
             {emailSend && <VerifyEmail />}
-            <div className='max-w-md p-5 flex flex-col gap-5 text-center'>
+            {error && <Alert error={error} />}
+            <div className='max-w-md p-5 flex flex-col gap-5 text-center' onClick={() => setError('')}>
                 <h1 className='text-3xl'>Super Chat</h1>
                 <p className='text-base'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, numquam.</p>
                 <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
-                    <input type="text" placeholder="Name" className="input input-bordered input-md w-full" name='name' value={inputs.name || ""} onChange={handleInputs} />
-                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full" name='email' value={inputs.email || ""} onChange={handleInputs} />
-                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full" name='password' value={inputs.password || ""} onChange={handleInputs} />
+                    <input type="text" placeholder="Name" className="input input-bordered input-md w-full" name='name' value={inputs.name || ""} onChange={handleInputs} required />
+                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full" name='email' value={inputs.email || ""} onChange={handleInputs} required />
+                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full" name='password' value={inputs.password || ""} onChange={handleInputs} required />
+                    <label htmlFor="file" className='flex gap-5'>
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            height="2em"
+                            width="2em"
+                        >
+                            <path d="M4 5h13v7h2V5c0-1.103-.897-2-2-2H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h8v-2H4V5z" />
+                            <path d="M8 11l-3 4h11l-4-6-3 4z" />
+                            <path d="M19 14h-2v3h-3v2h3v3h2v-3h3v-2h-3z" />
+                        </svg>
+                        <p className='text-lg font-medium'>Add profile image</p>
+                        {file &&
+                            <div className="w-10 h-10 rounded-full">
+                                <img alt={file.name} src={URL.createObjectURL(file)} />
+                            </div>
+                        }
+                    </label>
+                    <input type="file" accept='' className='hidden' id='file' required onChange={(event) => setFile(event.target.files[0])} />
                     <button className="btn">Sign up</button>
                 </form>
                 <div className='flex gap-5 justify-center'>

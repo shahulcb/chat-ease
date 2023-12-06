@@ -4,6 +4,7 @@ import { sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth
 import { auth } from '../firebase/config'
 import Loading from '../components/Loading'
 import VerifyEmail from '../components/VerifyEmail'
+import Alert from '../components/Alert'
 
 
 
@@ -12,6 +13,7 @@ function Login() {
     const [loading, setLoading] = useState(false)
     const [emailSend, setEmailSend] = useState(false)
     const [inputs, setInputs] = useState({})
+    const [error, setError] = useState('')
     const handleInputs = (event) => {
         setInputs(prev => ({
             ...prev,
@@ -44,18 +46,20 @@ function Login() {
             setInputs({})
             setLoading(false)
             setEmailSend(false)
+            setError(errorMessage)
         }
     }
     return (
         <div className='w-full h-screen flex items-center justify-center'>
             {loading && <Loading />}
             {emailSend && <VerifyEmail />}
-            <div className='max-w-md p-5 flex flex-col gap-5 text-center'>
+            {error && <Alert error={error} />}
+            <div className='max-w-md p-5 flex flex-col gap-5 text-center' onClick={() => setError('')}>
                 <h1 className='text-3xl'>Super Chat</h1>
                 <p className='text-base'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, numquam.</p>
                 <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
-                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full" name='email' value={inputs.email || ""} onChange={handleInputs} />
-                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full" name='password' value={inputs.password || ""} onChange={handleInputs} />
+                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full" name='email' value={inputs.email || ""} onChange={handleInputs} required />
+                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full" name='password' value={inputs.password || ""} onChange={handleInputs} required />
                     <button className="btn">Login</button>
                 </form>
                 <div className='flex gap-5 justify-center'>
