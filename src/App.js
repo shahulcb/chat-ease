@@ -7,24 +7,39 @@ import { AuthContext } from "./context/AuthContext";
 
 function App() {
   const user = useContext(AuthContext)
-  console.log(user);
+  function ProtectedRoute({ children }) {
+    if (user && user.emailVerified) {
+      return children
+    } else {
+      return <Navigate to={"/login"} replace />
+    }
+  }
+
+  function UnauthenticatedRoute({ children }) {
+    if (user && user.emailVerified) {
+      return <Navigate to={"/"} />
+    } else {
+      return children
+    }
+  }
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={
-          user && user.emailVerified ?
+        <Route path="/*" element={
+          <ProtectedRoute>
             <Home />
-            : <Navigate to={"/login"} />
+          </ProtectedRoute>
         } />
         <Route path="/login" element={
-          user && user.emailVerified ?
-            <Navigate to={"/"} /> :
+          <UnauthenticatedRoute>
             <Login />
+          </UnauthenticatedRoute>
         } />
         <Route path="/signup" element={
-          user && user.emailVerified ?
-            <Navigate to={"/"} /> :
+          <UnauthenticatedRoute>
             <Signup />
+          </UnauthenticatedRoute>
         } />
       </Routes>
     </BrowserRouter>

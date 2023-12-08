@@ -60,7 +60,7 @@ function Login() {
                 <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
                     <input type="email" placeholder="Email" className="input input-bordered input-md w-full" name='email' value={inputs.email || ""} onChange={handleInputs} required />
                     <input type="password" placeholder="Password" className="input input-bordered input-md w-full" name='password' value={inputs.password || ""} onChange={handleInputs} required />
-                    <button className="btn">Login</button>
+                    <button className="btn" type='submit'>Login</button>
                 </form>
                 <div className='flex gap-5 justify-center'>
                     <svg

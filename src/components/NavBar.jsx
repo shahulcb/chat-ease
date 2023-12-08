@@ -12,16 +12,21 @@ function NavBar() {
                 <Link to={"/"} className="btn btn-ghost text-xl">Super Chat</Link>
             </div>
             <div className="flex-none gap-2">
-                <div className="form-control">
-                    <input type="text" placeholder={`@ ${user.displayName}`} className="input input-bordered w-24 md:w-auto" />
-                </div>
+                <h1 className='text-xl font-normal'>@{user.displayName}</h1>
                 <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                        <div className="w-10 rounded-full">
-                            <img alt={user.displayName} src={user.photoURL} />
+                    <div className="btn bg-transparent border-0 avatar placeholder cursor-pointer" tabIndex={0}>
+                        <div className="bg-neutral text-neutral-content rounded-full w-10 ring ring-primary ring-offset-base-100 ring-offset-2">
+                            {user.photoURL === "" ?
+                                <img src={user.photoURL} alt={user.displayName} className='object-cover' />
+                                :
+                                <span>{user.displayName.substring(0, 2).toUpperCase()}</span>
+                            }
                         </div>
                     </div>
                     <ul className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-md w-32 gap-1">
+                        <li>
+                            <Link to={"/search"}>Search people</Link>
+                        </li>
                         <li>
                             <Link to={"/profile"}>Profile</Link>
                         </li>
