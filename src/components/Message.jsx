@@ -1,21 +1,37 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { ChatContext } from '../context/ChatContext'
+import { AuthContext } from '../context/AuthContext'
 
-function Message({ className }) {
-    const customClassName = `chat ${className}`
+function Message({ message }) {
+    const { data } = useContext(ChatContext)
+    const user = useContext(AuthContext)
+    const customClassName = message.senderId === user.uid ? "chat-end" : "chat-start"
     return (
-        <div className={customClassName}>
-            <div className="chat-image avatar">
-                <div className="w-10 rounded-full">
-                    <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+        <div className={`chat ${customClassName}`}>
+            <div className="chat-image">
+                <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
+                    <div className="bg-neutral text-neutral-content rounded-full w-12">
+                        {message.senderId === user.uid ? (
+                            <>
+                                {user.photoURL === "" ?
+                                    <img src={user?.photoURL} alt={user.displayName} className='object-cover' />
+                                    : <span>{user.displayName.substring(0, 2).toUpperCase()}</span>
+                                }
+                            </>
+                        ) : (
+                            <>
+                                {data.user?.photoURL === "" ?
+                                    <img src={data.user?.photoURL} alt={data.user.displayName} className='object-cover' />
+                                    : <span>{data.user.displayName.substring(0, 2).toUpperCase()}</span>
+                                }
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
-            <div className="chat-header">
-                Obi-Wan Kenobi
-                <time className="text-xs opacity-50">12:45</time>
-            </div>
-            <div className="chat-bubble">You were the Chosen One!</div>
+            <div className="chat-bubble">{message.text}</div>
             <div className="chat-footer opacity-50">
-                Delivered
+                <time className="text-xs opacity-50">{new Date(message.date.seconds * 1000 + message.date.nanoseconds / 1000000).toDateString()}</time>
             </div>
         </div >
     )

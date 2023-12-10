@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { ChatContext } from "../context/ChatContext"
 
 function ChatHeader() {
+    const { data } = useContext(ChatContext)
     return (
         <div className='w-full h-16 bg-base-200 sticky top-0 z-50 flex items-center justify-between px-10'>
-            <span className='text-lg font-medium'>ancy joy</span>
+            <span className='text-lg font-medium'>{data.user?.displayName}</span>
             <div className='flex gap-5'>
                 <svg
                     viewBox="0 0 512 512"
@@ -39,8 +41,8 @@ function ChatHeader() {
                         <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
                     </svg>
                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52 mt-7">
-                        <li><a href>Item 1</a></li>
-                        <li><a href>Item 2</a></li>
+                        {/* <li><a>Item 1</a></li>
+                        <li><a>Item 2</a></li> */}
                     </ul>
                 </div>
 

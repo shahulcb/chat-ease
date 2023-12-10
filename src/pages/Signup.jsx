@@ -9,9 +9,9 @@ import Alert from '../components/Alert'
 
 function Signup() {
     const navigate = useNavigate()
-    const [inputs, setInputs] = useState({})
     const [loading, setLoading] = useState(false)
     const [emailSend, setEmailSend] = useState(false)
+    const [inputs, setInputs] = useState({})
     const [error, setError] = useState('')
     const handleInputs = (event) => {
         setInputs(prev => ({
@@ -24,20 +24,26 @@ function Signup() {
         try {
             setLoading(true)
             const userCredential = await createUserWithEmailAndPassword(auth, inputs.email, inputs.password)
+            await updateProfile(userCredential.user, {
+                displayName: inputs.name
+            })
             await setDoc(doc(db, "users", userCredential.user.uid), {
                 uid: userCredential.user.uid,
                 displayName: inputs.name,
                 email: inputs.email
             })
-            await sendEmailVerification(auth.currentUser)
-            setEmailSend(true)
-            let intervel = setInterval(async () => {
-                if (userCredential.user.emailVerified) {
-                    clearInterval(intervel)
-                    navigate("/")
-                }
-                await userCredential.user.reload()
-            }, 2000);
+            await setDoc(doc(db, "chatList", userCredential.user.uid), {})
+            if (!userCredential.user.emailVerified) {
+                await sendEmailVerification(auth.currentUser)
+                setEmailSend(true)
+                let intervel = setInterval(async () => {
+                    if (userCredential.user.emailVerified) {
+                        clearInterval(intervel)
+                        navigate("/")
+                    }
+                    await userCredential.user.reload()
+                }, 2000);
+            }
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -49,7 +55,6 @@ function Signup() {
         }
     }
     return (
-
         <div className='w-full h-screen flex items-center justify-center'>
             {loading && <Loading />}
             {emailSend && <VerifyEmail />}

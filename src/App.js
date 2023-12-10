@@ -17,7 +17,7 @@ function App() {
 
   function UnauthenticatedRoute({ children }) {
     if (user && user.emailVerified) {
-      return <Navigate to={"/"} />
+      return <Navigate to={"/"} replace />
     } else {
       return children
     }

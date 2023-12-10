@@ -19,7 +19,7 @@ function NavBar() {
                             {user.photoURL === "" ?
                                 <img src={user.photoURL} alt={user.displayName} className='object-cover' />
                                 :
-                                <span>{user.displayName.substring(0, 2).toUpperCase()}</span>
+                                <span> {user.displayName.substring(0, 2).toUpperCase()}</span>
                             }
                         </div>
                     </div>
@@ -31,12 +31,12 @@ function NavBar() {
                             <Link to={"/profile"}>Profile</Link>
                         </li>
                         <li>
-                            <button onClick={() => signOut(auth)} className="btn min-h-full h-full btn-error hover:bg-red-500 justify-start rounded-md">Logout</button>
+                            <button onClick={() => { localStorage.removeItem("user"); signOut(auth) }} className="btn min-h-full h-full btn-error hover:bg-red-500 justify-start rounded-md">Logout</button>
                         </li>
                     </ul>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
