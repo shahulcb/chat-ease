@@ -26,13 +26,13 @@ function MessageInput() {
             })
             await updateDoc(doc(db, "chatList", user.uid), {
                 [data.chatId + ".lastMessage"]: {
-                    test: input
+                    text: input
                 },
                 [data.chatId + ".date"]: serverTimestamp(),
             })
             await updateDoc(doc(db, "chatList", data.user.uid), {
                 [data.chatId + ".lastMessage"]: {
-                    test: input
+                    text: input
                 },
                 [data.chatId + ".date"]: serverTimestamp(),
             })

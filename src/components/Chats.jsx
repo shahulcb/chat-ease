@@ -27,12 +27,6 @@ function Chats() {
     }
     return (
         <div className='flex flex-col gap-1 p-2'>
-            {chatList == null ? (
-                <div className='w-full h-52 flex flex-col justify-center items-center text-center'>
-                    <p>Welcome! Begin your first chat and spark a conversation now.</p>
-                    <Link to={"/search"}>start chats</Link>
-                </div>
-            ) : null}
             {chatList &&
                 Object.entries(chatList).map((chat) => (
                     <div className={`flex gap-5 p-3 items-center border-2 border-base-200 hover:bg-base-200 cursor-pointer rounded-md ${data.user.uid === chat[1].userInfo.uid && "bg-base-200"}`} key={chat[0]} onClick={() => handleClick(chat[1].userInfo)}>
@@ -47,7 +41,7 @@ function Chats() {
                         </div>
                         <div>
                             <span className='text-lg font-medium'>{chat[1].userInfo.displayName}</span>
-                            <p className='text-sm text-gray-400'>{chat[1].userInfo?.lastMessage}</p>
+                            <p className='text-sm text-gray-400'>{chat[1].lastMessage?.text}</p>
                         </div>
                     </div>
                 ))

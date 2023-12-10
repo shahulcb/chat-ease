@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore"
+import { Timestamp, arrayUnion, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore"
 import { db } from "../firebase/config"
 import { useContext } from 'react'
 import { AuthContext } from "../context/AuthContext"
+import { v4 as uuid } from 'uuid'
 
 function Search() {
     const user = useContext(AuthContext)
@@ -10,16 +11,61 @@ function Search() {
     const [searchData, setSearchData] = useState([])
     const [searchDataStatus, setSearchDataStatus] = useState(false)
     const [loading, setLoading] = useState(false)
-    const handleSubmit = async (event) => {
-        event.preventDefault()
+
+    const handleOnClick = async (clickedUser) => {
+        const combainedId = user.uid > clickedUser.uid ? user.uid + clickedUser.uid : clickedUser.uid + user.uid
+        try {
+            const res = await getDoc(doc(db, "chats", combainedId))
+            if (!res.exists()) {
+                await setDoc(doc(db, "chats", combainedId), {
+                    messages: arrayUnion({
+                        id: uuid(),
+                        text: "Hi👋",
+                        senderId: user.uid,
+                        date: Timestamp.now()
+                    })
+                })
+                await updateDoc(doc(db, "chatList", user.uid), {
+                    [combainedId + ".userInfo"]: {
+                        uid: clickedUser.uid,
+                        displayName: clickedUser.displayName
+                    },
+                    [combainedId + ".lastMessage"]: {
+                        text: "Hi👋"
+                    },
+                    [combainedId + ".date"]: serverTimestamp()
+                })
+                await updateDoc(doc(db, "chatList", clickedUser.uid), {
+                    [combainedId + ".userInfo"]: {
+                        uid: user.uid,
+                        displayName: user.displayName
+                    },
+                    [combainedId + ".lastMessage"]: {
+                        text: "Hi👋"
+                    },
+                    [combainedId + ".date"]: serverTimestamp()
+                })
+            }
+            setSearchData([])
+            setInput('')
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    const handleChangeInput = async (event) => {
+        setInput(event.target.value)
+        if (event.target.value.trim().length === 0) {
+            setSearchData([])
+            setSearchDataStatus(false)
+            return false
+        }
         const q = query(collection(db, "users"),
-            where("displayName", ">=", input),
-            where("displayName", "<", input + "\uf8ff")
+            where("displayName", ">=", event.target.value),
+            where("displayName", "<", event.target.value + "\uf8ff")
         )
         try {
             setSearchData([])
             setLoading(true)
-            setSearchDataStatus(false)
             const querySnapshot = await getDocs(q)
 
             const data = querySnapshot.docs
@@ -31,11 +77,13 @@ function Search() {
                     }
                 ))
             if (data && data.length) {
+                setSearchDataStatus(false)
                 setSearchData(data)
             } else {
                 setSearchDataStatus(true)
+                searchData([])
             }
-            setInput('')
+            // setInput('')
             setLoading(false)
         }
         catch (error) {
@@ -43,50 +91,22 @@ function Search() {
             setLoading(false)
         }
     }
-    const handleOnClick = async (clickedUser) => {
-        // console.log(clickedUser);
-        const combainedId = user.uid > clickedUser.uid ? user.uid + clickedUser.uid : clickedUser.uid + user.uid
-        try {
-            const res = await getDoc(doc(db, "chats", combainedId))
-            if (!res.exists()) {
-                await setDoc(doc(db, "chats", combainedId), { messages: [] })
-                await updateDoc(doc(db, "chatList", user.uid), {
-                    [combainedId + ".userInfo"]: {
-                        uid: clickedUser.uid,
-                        displayName: clickedUser.displayName
-                    },
-                    [combainedId + ".date"]: serverTimestamp()
-                })
-                await updateDoc(doc(db, "chatList", clickedUser.uid), {
-                    [combainedId + ".userInfo"]: {
-                        uid: user.uid,
-                        displayName: user.displayName
-                    },
-                    [combainedId + ".date"]: serverTimestamp()
-                })
-            }
-        } catch (error) {
-            console.log(error.message);
-        }
-    }
     return (
         <div className='p-2'>
-            <form onSubmit={handleSubmit}>
-                <input type="text" placeholder="Search here" className="input input-bordered w-full" onChange={(event) => setInput(event.target.value)} value={input} required />
-            </form>
+            <input type="text" placeholder="Start a new chat" className="input input-bordered w-full h-10 placeholder:text-sm placeholder:text-gray-600 focus:outline-none" onChange={handleChangeInput} value={input || ""} />
             <div className='flex flex-col gap-1 p-2 px-0'>
-                {searchDataStatus &&
-                    (
-                        <div className='flex gap-5 p-3 items-center justify-between cursor-pointer rounded-md'>
-                            <p className='text-base font-medium'>no users found</p>
-                        </div>
-                    )
-                }
                 {
                     loading &&
                     (
                         <div className='flex gap-5 p-3 items-center justify-center cursor-pointer rounded-md'>
                             <span className="loading loading-spinner loading-sm"></span>
+                        </div>
+                    )
+                }
+                {
+                    searchDataStatus && (
+                        <div className='w-full text-center pt-2'>
+                            <p className='text-lg font-medium'>user not found</p>
                         </div>
                     )
                 }
@@ -118,7 +138,6 @@ function Search() {
                     ))
                 }
             </div>
-
         </div >
     )
 }
