@@ -9,10 +9,10 @@ function NavBar() {
     return (
         <div className="navbar bg-base-300 static top-0">
             <div className="flex-1">
-                <h1 className='px-2 text-lg font-medium'>Super Chat</h1>
+                <Link to={"/"} className='px-2 text-lg font-medium'>Super Chat</Link>
             </div>
-            <div className="flex-none gap-2">
-                {/* <h1 className='text-xl font-normal'></h1> */}
+            <div className="flex-none">
+                {/* <h1 className='text-sm font-medium'>@ {user.displayName}</h1> */}
                 <div className="dropdown dropdown-end">
                     <div className="btn bg-transparent border-0 avatar placeholder cursor-pointer" tabIndex={0}>
                         <div className="bg-neutral text-neutral-content rounded-full w-10 ring ring-primary ring-offset-base-100 ring-offset-2">
@@ -24,6 +24,9 @@ function NavBar() {
                         </div>
                     </div>
                     <ul className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-md w-32 gap-1">
+                        <li>
+                            <a className='font-medium'>@ {user.displayName}</a>
+                        </li>
                         <li>
                             <Link to={"/profile"}>Profile</Link>
                         </li>

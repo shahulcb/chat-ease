@@ -43,11 +43,10 @@ function MessageInput() {
 
     }
     return (
-        <div className='w-full h-16 bg-base-200 sticky bottom-0 flex items-center px-10 gap-3'>
+        <div className='w-full h-16 bg-base-200 sticky bottom-0 flex items-center md:px-10 px-5 gap-3'>
             <input type="text" placeholder="Type something" className="input input-bordered w-full bg-base-200" onChange={(event) => setInput(event.target.value)} value={input || ""} />
-
-            {/* <input type="file" className='hidden' id='file' />
-            <label htmlFor="file" className='cursor-pointer'>
+            {/* <input type="file" className='hidden' id='file' /> */}
+            {/* <label htmlFor="file" className='cursor-pointer'>
                 <svg
                     viewBox="0 0 1024 1024"
                     fill="currentColor"

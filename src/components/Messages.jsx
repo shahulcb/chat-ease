@@ -16,9 +16,9 @@ function Messages() {
         }
     }, [data.chatId])
     return (
-        <div className='flex flex-col p-10 overflow-y-scroll h-screen'>
+        <div className='flex flex-col md:p-10 p-5 md:pb-40 pb-56 overflow-y-scroll h-screen'>
             {messages.map((message) => (
-                <Message message={message} key={messages.id} />
+                <Message message={message} key={message.id} />
             ))}
         </div>
     )

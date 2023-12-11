@@ -18,6 +18,11 @@ export const ChatContextProvider = ({ children }) => {
                     chatId: user.uid > action.payload.uid ? user.uid + action.payload.uid : action.payload.uid + user.uid,
                     user: action.payload,
                 }
+            case "REMOVE_USER":
+                return {
+                    chatId: "",
+                    user: {}
+                }
             default:
                 return state
         }

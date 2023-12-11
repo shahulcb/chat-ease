@@ -29,7 +29,7 @@ function Message({ message }) {
                     </div>
                 </div>
             </div>
-            <div className="chat-bubble">{message.text}</div>
+            <div className={`chat-bubble ${message.senderId === user.uid ? "chat-bubble-info" : "chat-bubble-primary"}`}>{message.text}</div>
             <div className="chat-footer opacity-50">
                 <time className="text-xs opacity-50">{new Date(message.date.seconds * 1000 + message.date.nanoseconds / 1000000).toDateString()}</time>
             </div>

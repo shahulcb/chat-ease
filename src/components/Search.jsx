@@ -49,7 +49,8 @@ function Search() {
             setSearchData([])
             setInput('')
         } catch (error) {
-            console.log(error.message);
+            setSearchData([])
+            setInput('')
         }
     }
     const handleChangeInput = async (event) => {
@@ -57,6 +58,7 @@ function Search() {
         if (event.target.value.trim().length === 0) {
             setSearchData([])
             setSearchDataStatus(false)
+            setInput('')
             return false
         }
         const q = query(collection(db, "users"),
@@ -83,17 +85,15 @@ function Search() {
                 setSearchDataStatus(true)
                 searchData([])
             }
-            // setInput('')
             setLoading(false)
         }
         catch (error) {
-            console.log(error);
             setLoading(false)
         }
     }
     return (
         <div className='p-2'>
-            <input type="text" placeholder="Start a new chat" className="input input-bordered w-full h-10 placeholder:text-sm placeholder:text-gray-600 focus:outline-none" onChange={handleChangeInput} value={input || ""} />
+            <input type="text" placeholder="🔍 Start a new chat" className="input input-bordered w-full h-10 placeholder:text-sm placeholder:text-gray-600 focus:outline-none" onChange={handleChangeInput} value={input || ""} />
             <div className='flex flex-col gap-1 p-2 px-0'>
                 {
                     loading &&
