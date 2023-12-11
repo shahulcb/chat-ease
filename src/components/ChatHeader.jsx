@@ -4,9 +4,9 @@ import { ChatContext } from "../context/ChatContext"
 function ChatHeader() {
     const { data, dispatch } = useContext(ChatContext)
     return (
-        <div className='w-full h-16 bg-base-200 sticky top-0 z-50 flex items-center justify-between md:px-10 px-5'>
+        <div className='w-full h-16 bg-base-200 flex items-center justify-between md:px-10 px-5'>
             <div className='flex items-center gap-2'>
-                <div onClick={() => dispatch({ type: "REMOVE_USER", payload: {} })} className='md:hidden block'>
+                <div onClick={() => dispatch({ type: "REMOVE_USER", payload: {} })} className='md:hidden block cursor-pointer'>
                     <svg
                         fill="currentColor"
                         viewBox="0 0 16 16"

@@ -28,23 +28,27 @@ function Chats() {
     return (
         <div className='flex flex-col gap-1 p-2'>
             {chatList &&
-                Object.entries(chatList).map((chat) => (
-                    <div className={`flex gap-5 p-3 items-center border-2 border-base-200 hover:bg-base-200 cursor-pointer rounded-md ${data.user.uid === chat[1].userInfo.uid && "bg-base-200"}`} key={chat[0]} onClick={() => handleClick(chat[1].userInfo)}>
-                        <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
-                            <div className="bg-neutral text-neutral-content rounded-full w-12">
-                                {chat[1].userInfo?.photoURL ?
-                                    <img src={chat[1].userInfo?.photoURL} alt={chat[1].userInfo.displayName} className='object-cover' />
-                                    :
-                                    <span>{chat[1].userInfo.displayName.substring(0, 2).toUpperCase()}</span>
-                                }
+                Object.entries(chatList)
+                    .sort((a, b) => {
+                        return b[1].date - a[1].date
+                    })
+                    .map((chat) => (
+                        <div className={`flex gap-5 p-3 items-center border-2 border-base-200 hover:bg-base-200 cursor-pointer rounded-md ${data.user.uid === chat[1].userInfo.uid && "bg-base-200"}`} key={chat[0]} onClick={() => handleClick(chat[1].userInfo)}>
+                            <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
+                                <div className="bg-neutral text-neutral-content rounded-full w-12">
+                                    {chat[1].userInfo?.photoURL ?
+                                        <img src={chat[1].userInfo?.photoURL} alt={chat[1].userInfo.displayName} className='object-cover' />
+                                        :
+                                        <span>{chat[1].userInfo.displayName.substring(0, 2).toUpperCase()}</span>
+                                    }
+                                </div>
+                            </div>
+                            <div>
+                                <span className='text-lg font-medium'>{chat[1].userInfo.displayName}</span>
+                                <p className='text-sm text-gray-400'>{chat[1].lastMessage?.text}</p>
                             </div>
                         </div>
-                        <div>
-                            <span className='text-lg font-medium'>{chat[1].userInfo.displayName}</span>
-                            <p className='text-sm text-gray-400'>{chat[1].lastMessage?.text}</p>
-                        </div>
-                    </div>
-                ))
+                    ))
             }
         </div>
     )

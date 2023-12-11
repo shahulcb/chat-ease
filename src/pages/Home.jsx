@@ -9,7 +9,7 @@ function Home() {
     return (
         <div className='w-full h-screen flex'>
             <SideBar />
-            <div className={`md:flex-[2] md:relative overflow-hidden bg-base-100 ${data.chatId !== "" && "flex-none w-full absolute h-full"}`}>
+            <div className={`md:flex-[2] md:relative bg-base-100 ${data.chatId !== "" && "flex-none w-full absolute"}`}>
                 {data.chatId !== "" && <Chat />}
             </div>
         </div>

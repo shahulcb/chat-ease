@@ -6,7 +6,8 @@ import { Route, Routes } from 'react-router-dom'
 
 function Chat() {
     return (
-        <>
+        // <>
+        <div className='flex flex-col h-screen'>
             <Routes>
                 <Route index element={
                     <>
@@ -16,7 +17,8 @@ function Chat() {
                     </>
                 } />
             </Routes>
-        </>
+        </div>
+        // </>
     )
 }
 
