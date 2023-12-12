@@ -13,6 +13,7 @@ function MessageInput() {
 
     const [input, setInput] = useState('')
     const [files, setFiles] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const handleFiles = (event) => {
         const selectedFiles = event.target.files
@@ -35,6 +36,7 @@ function MessageInput() {
         }
         try {
             if (files.length >= 1) {
+                setLoading(true)
                 const uploadPromises = files.map(async (file) => {
                     const storageRef = ref(storage, file.name)
                     await uploadBytes(storageRef, file)
@@ -86,6 +88,7 @@ function MessageInput() {
             }
             setInput("")
             setFiles([])
+            setLoading(false)
         } catch (error) {
             console.log(error);
         }
@@ -108,7 +111,7 @@ function MessageInput() {
                 </label>
                 <input type="text" placeholder="Type a message" className="input input-bordered w-full bg-base-200 h-10 placeholder:text-sm placeholder:text-gray-400 focus:outline-none" onChange={(event) => setInput(event.target.value)} value={input || ""} />
                 <button className="btn btn-primary rounded-full h-10 w-10 min-h-0 p-0">
-                    <svg
+                    {!loading ? (<svg
                         viewBox="0 0 1024 1024"
                         fill="currentColor"
                         height="1.5em"
@@ -118,12 +121,16 @@ function MessageInput() {
                             <style />
                         </defs>
                         <path d="M931.4 498.9L94.9 79.5c-3.4-1.7-7.3-2.1-11-1.2-8.5 2.1-13.8 10.7-11.7 19.3l86.2 352.2c1.3 5.3 5.2 9.6 10.4 11.3l147.7 50.7-147.6 50.7c-5.2 1.8-9.1 6-10.3 11.3L72.2 926.5c-.9 3.7-.5 7.6 1.2 10.9 3.9 7.9 13.5 11.1 21.5 7.2l836.5-417c3.1-1.5 5.6-4.1 7.2-7.1 3.9-8 .7-17.6-7.2-21.6zM170.8 826.3l50.3-205.6 295.2-101.3c2.3-.8 4.2-2.6 5-5 1.4-4.2-.8-8.7-5-10.2L221.1 403 171 198.2l628 314.9-628.2 313.2z" />
-                    </svg>
+                    </svg>)
+                        : (
+                            <span className="loading loading-spinner loading-sm"></span>
+                        )
+                    }
                 </button>
                 <div className='w-full h-20 absolute -top-24 rounded-md flex gap-1'>
                     {files.map((image, index) => (
-                        <div className='w-20 h-full bg-base-200 relative' key={index}>
-                            <img key={index} src={URL.createObjectURL(image)} alt="" className='object-cover rounded-md' />
+                        <div className='w-20 h-full relative' key={index}>
+                            <img key={index} src={URL.createObjectURL(image)} alt="" className='object-cover rounded-md h-full' />
                             <div className='absolute -top-0.5 -right-0.5 cursor-pointer border border-white rounded-full' onClick={() => handleRemoveFile(index)}>
                                 <svg
                                     viewBox="0 0 21 21"
