@@ -2,7 +2,7 @@ import React from 'react'
 import NavBar from './NavBar'
 import Chats from './Chats'
 import { Route, Routes } from 'react-router-dom'
-import Profile from '../pages/Profile'
+import Settings from '../pages/Settings'
 import Search from './Search'
 
 function SideBar() {
@@ -16,7 +16,7 @@ function SideBar() {
                         <Chats />
                     </>
                 } />
-                <Route path='/profile' element={<Profile />} />
+                <Route path='/settings' element={<Settings />} />
             </Routes>
         </div>
     )

@@ -25,10 +25,10 @@ function NavBar() {
                     </div>
                     <ul className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-md w-32 gap-1">
                         <li>
-                            <a className='font-medium'>@ {user.displayName}</a>
+                            <Link className='font-medium'>@ {user.displayName}</Link>
                         </li>
                         <li>
-                            <Link to={"/profile"}>Profile</Link>
+                            <Link to={"/settings"}>Settings</Link>
                         </li>
                         <li>
                             <button onClick={() => { localStorage.removeItem("user"); signOut(auth) }} className="btn min-h-full h-full btn-error hover:bg-red-500 justify-start rounded-md">Logout</button>

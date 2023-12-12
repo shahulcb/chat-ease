@@ -3,6 +3,7 @@ import { ChatContext } from '../context/ChatContext'
 import { AuthContext } from '../context/AuthContext'
 
 function Message({ message }) {
+    console.log(message);
     const { data } = useContext(ChatContext)
     const user = useContext(AuthContext)
     const customClassName = message.senderId === user.uid ? "chat-end" : "chat-start"
@@ -12,6 +13,18 @@ function Message({ message }) {
     }, [message])
     return (
         <div className={`chat ${customClassName}`} ref={ref}>
+
+            {message?.files && message.files.length > 0 && message.senderId === user.uid &&
+                (
+                    <div className='flex flex-col gap-2 mb-2'>
+                        {message.files.map((path, index) => (
+                            <div className='w-40 h-56 rounded-md' key={index}>
+                                <img src={path} alt="" className='object-cover rounded-md h-full' />
+                            </div>
+                        ))}
+                    </div>
+                )
+            }
             <div className="chat-image">
                 <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
                     <div className="bg-neutral text-neutral-content rounded-full w-12">
@@ -33,9 +46,24 @@ function Message({ message }) {
                     </div>
                 </div>
             </div>
-            <div className={`chat-bubble ${message.senderId === user.uid ? "chat-bubble-info" : "chat-bubble-primary"}`}>{message.text}</div>
+            {message?.files && message.files.length > 0 && message.senderId !== user.uid &&
+                (
+                    <div className='flex flex-col gap-2 mb-2'>
+                        {message.files.map((path, index) => (
+                            <div className='w-40 h-56 rounded-md' key={index}>
+                                <img src={path} alt="" className='object-cover rounded-md h-full' />
+                            </div>
+                        ))}
+                    </div>
+                )
+            }
+            {message.text.trim() !== '' &&
+                <div className={`chat-bubble ${message.senderId === user.uid ? "chat-bubble-info" : "chat-bubble-primary"}`}>{message.text}</div>
+            }
             <div className="chat-footer opacity-50">
-                <time className="text-xs opacity-50">{new Date(message.date.seconds * 1000 + message.date.nanoseconds / 1000000).toDateString()}</time>
+                <time className="text-xs opacity-50">
+                    {new Date(message.date.seconds * 1000 + message.date.nanoseconds / 1000000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </time>
             </div>
         </div >
     )

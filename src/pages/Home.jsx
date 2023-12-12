@@ -4,7 +4,7 @@ import Chat from './Chat'
 import { ChatContext } from '../context/ChatContext'
 
 function Home() {
-    const { data, dispatch } = useContext(ChatContext)
+    const { data } = useContext(ChatContext)
 
     return (
         <div className='w-full h-screen flex'>

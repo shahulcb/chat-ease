@@ -1,6 +1,5 @@
 import { doc, onSnapshot } from 'firebase/firestore'
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { db } from '../firebase/config'
 import { AuthContext } from '../context/AuthContext'
 import { ChatContext } from '../context/ChatContext'
@@ -33,7 +32,7 @@ function Chats() {
                         return b[1].date - a[1].date
                     })
                     .map((chat) => (
-                        <div className={`flex gap-5 p-3 items-center border-2 border-base-200 hover:bg-base-200 cursor-pointer rounded-md ${data.user.uid === chat[1].userInfo.uid && "bg-base-200"}`} key={chat[0]} onClick={() => handleClick(chat[1].userInfo)}>
+                        <div className={`flex gap-5 p-3 items-center border-2 border-base-200 hover:bg-base-200 cursor-pointer rounded-md relative ${data.user.uid === chat[1].userInfo.uid && "bg-base-200"}`} key={chat[0]} onClick={() => handleClick(chat[1].userInfo)}>
                             <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
                                 <div className="bg-neutral text-neutral-content rounded-full w-12">
                                     {chat[1].userInfo?.photoURL ?
@@ -47,6 +46,7 @@ function Chats() {
                                 <span className='text-lg font-medium'>{chat[1].userInfo.displayName}</span>
                                 <p className='text-sm text-gray-400'>{chat[1].lastMessage?.text}</p>
                             </div>
+                            {/* <div className="badge badge-success badge-sm absolute right-5 h-6 w-6">5</div> */}
                         </div>
                     ))
             }
