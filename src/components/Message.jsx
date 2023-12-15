@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext'
 function Message({ message }) {
     console.log(message);
     const { data } = useContext(ChatContext)
-    const user = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const customClassName = message.senderId === user.uid ? "chat-end" : "chat-start"
     const ref = useRef()
     useEffect(() => {
@@ -27,7 +27,7 @@ function Message({ message }) {
             }
             <div className="chat-image">
                 <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
-                    <div className="bg-neutral text-neutral-content rounded-full w-12">
+                    <div className="bg-gray-700 rounded-full w-12 text-gray-300">
                         {message.senderId === user.uid ? (
                             <>
                                 {user.photoURL === "" ?
@@ -58,10 +58,10 @@ function Message({ message }) {
                 )
             }
             {message.text.trim() !== '' &&
-                <div className={`chat-bubble ${message.senderId === user.uid ? "chat-bubble-info" : "chat-bubble-primary"}`}>{message.text}</div>
+                <div className={`chat-bubble text-white ${message.senderId === user.uid ? "bg-emerald-600" : "bg-slate-600"}`}>{message.text}</div>
             }
-            <div className="chat-footer opacity-50">
-                <time className="text-xs opacity-50">
+            <div className="chat-footer">
+                <time className="text-xs text-gray-400">
                     {new Date(message.date.seconds * 1000 + message.date.nanoseconds / 1000000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </time>
             </div>

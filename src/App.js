@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
 
 function App() {
-  const user = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
   function ProtectedRoute({ children }) {
     if (user && user.emailVerified) {
       return children

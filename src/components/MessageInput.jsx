@@ -8,7 +8,7 @@ import { storage } from "../firebase/config"
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 function MessageInput() {
-    const user = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const { data } = useContext(ChatContext)
 
     const [input, setInput] = useState('')
@@ -95,13 +95,13 @@ function MessageInput() {
 
     }
     return (
-        <div className='w-full h-16 bg-base-200 flex items-center md:px-10 px-5'>
+        <div className='w-full h-16 border-t border-gray-700 backdrop-blur-[1px] flex items-center md:px-10 px-5'>
             <form onSubmit={sendMessage} className='flex items-center gap-3 w-full relative'>
                 <input type="file" accept="image/*" multiple className='hidden' id='file' onChange={handleFiles} />
                 <label htmlFor="file" className='cursor-pointer'>
                     <svg
                         viewBox="0 0 24 24"
-                        fill="currentColor"
+                        fill="white"
                         height="1.5em"
                         width="1.5em">
                         <path d="M4 5h13v7h2V5c0-1.103-.897-2-2-2H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h8v-2H4V5z" />
@@ -109,7 +109,7 @@ function MessageInput() {
                         <path d="M19 14h-2v3h-3v2h3v3h2v-3h3v-2h-3z" />
                     </svg>
                 </label>
-                <input type="text" placeholder="Type a message" className="input input-bordered w-full bg-base-200 h-10 placeholder:text-sm placeholder:text-gray-400 focus:outline-none" onChange={(event) => setInput(event.target.value)} value={input || ""} />
+                <input type="text" placeholder="Type a message" className="input border border-gray-700 focus:border-gray-700 w-full bg-base-200 h-10 placeholder:text-sm placeholder:text-gray-300 focus:outline-none bg-transparent text-gray-300" onChange={(event) => setInput(event.target.value)} value={input || ""} />
                 <button className="btn btn-primary rounded-full h-10 w-10 min-h-0 p-0">
                     {!loading ? (<svg
                         viewBox="0 0 1024 1024"
@@ -131,22 +131,9 @@ function MessageInput() {
                     {files.map((image, index) => (
                         <div className='w-20 h-full relative' key={index}>
                             <img key={index} src={URL.createObjectURL(image)} alt="" className='object-cover rounded-md h-full' />
-                            <div className='absolute -top-0.5 -right-0.5 cursor-pointer border border-white rounded-full' onClick={() => handleRemoveFile(index)}>
-                                <svg
-                                    viewBox="0 0 21 21"
-                                    fill="currentColor"
-                                    height="1.3em"
-                                    width="1.3em">
-                                    <g
-                                        fill="none"
-                                        fillRule="evenodd"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round">
-                                        <path d="M15.5 15.5l-10-10zM15.5 5.5l-10 10" />
-                                    </g>
-                                </svg>
-                            </div>
+                            <button className="btn btn-sm btn-circle btn-outline absolute top-0 right-0 border-gray-300" onClick={() => handleRemoveFile(index)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
                         </div>
                     ))}
                 </div>

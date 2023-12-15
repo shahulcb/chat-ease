@@ -7,7 +7,7 @@ import Search from './Search'
 
 function SideBar() {
     return (
-        <div className='md:flex-[1] relative shadow-xl shadow-base-300 bg-base-300 flex-none w-full'>
+        <div className='md:flex-[1] relative bg-gray-900 shadow-white flex-none w-full'>
             <NavBar />
             <Routes>
                 <Route index element={

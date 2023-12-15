@@ -4,11 +4,11 @@ import { ChatContext } from "../context/ChatContext"
 function ChatHeader() {
     const { data, dispatch } = useContext(ChatContext)
     return (
-        <div className='w-full h-16 bg-base-200 flex items-center justify-between md:px-10 px-5'>
+        <div className='w-full h-16 border-b border-gray-700 backdrop-blur-[1px] flex items-center justify-between md:px-10 px-5'>
             <div className='flex items-center gap-2'>
                 <div onClick={() => dispatch({ type: "REMOVE_USER", payload: {} })} className='md:hidden block cursor-pointer'>
                     <svg
-                        fill="currentColor"
+                        fill="white"
                         viewBox="0 0 16 16"
                         height="1.9em"
                         width="1.9em">
@@ -18,21 +18,21 @@ function ChatHeader() {
                         />
                     </svg>
                 </div>
-                <span className='text-lg font-medium'>{data.user?.displayName}</span>
+                <span className='text-lg font-medium text-gray-300'>{data.user?.displayName}</span>
             </div>
             <div className='flex gap-5'>
                 <svg
                     viewBox="0 0 512 512"
-                    fill="currentColor"
+                    fill="white"
                     height="1.5em"
                     width="1.5em">
                     <path
-                        fill="none" stroke="currentColor" strokeMiterlimit={10}
+                        fill="none" stroke="white" strokeMiterlimit={10}
                         strokeWidth={32}
                         d="M451 374c-15.88-16-54.34-39.35-73-48.76-24.3-12.24-26.3-13.24-45.4.95-12.74 9.47-21.21 17.93-36.12 14.75s-47.31-21.11-75.68-49.39-47.34-61.62-50.53-76.48 5.41-23.23 14.79-36c13.22-18 12.22-21 .92-45.3-8.81-18.9-32.84-57-48.9-72.8C119.9 44 119.9 47 108.83 51.6A160.15 160.15 0 0083 65.37C67 76 58.12 84.83 51.91 98.1s-9 44.38 23.07 102.64 54.57 88.05 101.14 134.49S258.5 406.64 310.85 436c64.76 36.27 89.6 29.2 102.91 23s22.18-15 32.83-31a159.09 159.09 0 0013.8-25.8C465 391.17 468 391.17 451 374z" />
                 </svg>
                 <svg
-                    fill="currentColor"
+                    fill="white"
                     viewBox="0 0 16 16"
                     height="1.5em"
                     width="1.5em">
@@ -44,7 +44,7 @@ function ChatHeader() {
                 <div className="dropdown dropdown-end">
                     <svg
                         viewBox="0 0 24 24"
-                        fill="currentColor"
+                        fill="white"
                         height="1.5em"
                         width="1.5em"
                         tabIndex={0}

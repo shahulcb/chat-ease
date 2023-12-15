@@ -55,7 +55,7 @@ function Signup() {
         }
     }
     return (
-        <div className='w-full h-screen flex items-center justify-center'>
+        <div className='w-full h-screen flex items-center justify-center bg-gray-800 text-gray-300'>
             {loading && <Loading />}
             {emailSend && <VerifyEmail />}
             {error && <Alert error={error} />}
@@ -63,10 +63,10 @@ function Signup() {
                 <h1 className='text-3xl'>Super Chat</h1>
                 <p className='text-base'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, numquam.</p>
                 <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
-                    <input type="text" placeholder="Name" className="input input-bordered input-md w-full" name='name' value={inputs.name || ""} onChange={handleInputs} required />
-                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full" name='email' value={inputs.email || ""} onChange={handleInputs} required />
-                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full" name='password' value={inputs.password || ""} onChange={handleInputs} required />
-                    <button className="btn" type='submit'>Sign up</button>
+                    <input type="text" placeholder="Name" className="input input-bordered input-md w-full bg-gray-800" name='name' value={inputs.name || ""} onChange={handleInputs} required />
+                    <input type="email" placeholder="Email" className="input input-bordered input-md w-full bg-gray-800" name='email' value={inputs.email || ""} onChange={handleInputs} required />
+                    <input type="password" placeholder="Password" className="input input-bordered input-md w-full bg-gray-800" name='password' value={inputs.password || ""} onChange={handleInputs} required />
+                    <button className="btn hover:bg-gray-900 bg-gray-900 border-none" type='submit'>Sign up</button>
                 </form>
                 <div className='flex gap-5 justify-center'>
                     <svg
