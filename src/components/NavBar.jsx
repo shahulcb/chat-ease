@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase/config'
 import { AuthContext } from '../context/AuthContext'
+import userAvatar from "../assets/userAvatar.png"
 
 function NavBar() {
     const { user } = useContext(AuthContext)
-    console.log(user);
     return (
         <div className="navbar static top-0 p-3">
             <div className="flex-1">
@@ -20,16 +20,13 @@ function NavBar() {
                             {user.photoURL ?
                                 <img src={user.photoURL} alt={user.displayName} className='object-cover' />
                                 :
-                                <span> {user.displayName.substring(0, 2).toUpperCase()}</span>
+                                <img src={userAvatar} alt={user.displayName} className='object-cover' />
                             }
                         </div>
                     </div>
                     <ul className="mt-4 z-[1] p-2 shadow menu menu-sm dropdown-content bg-gray-800 rounded-md w-32 gap-1 text-gray-300">
                         <li>
-                            <Link className='font-medium'>@ {user.displayName}</Link>
-                        </li>
-                        <li>
-                            <Link to={"/settings"}>Settings</Link>
+                            <Link className='font-medium'>{user.displayName}</Link>
                         </li>
                         <li>
                             <button onClick={() => { localStorage.removeItem("user"); signOut(auth) }} className="btn min-h-full h-full btn-error hover:bg-red-500 justify-start rounded-md">Logout</button>

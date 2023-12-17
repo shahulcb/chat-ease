@@ -4,13 +4,11 @@ import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } 
 import { auth, db } from '../firebase/config'
 import { doc, setDoc } from "firebase/firestore"
 import Loading from '../components/Loading'
-import VerifyEmail from '../components/VerifyEmail'
 import Alert from '../components/Alert'
 
 function Signup() {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    const [emailSend, setEmailSend] = useState(false)
     const [inputs, setInputs] = useState({})
     const [error, setError] = useState('')
     const handleInputs = (event) => {
@@ -33,31 +31,23 @@ function Signup() {
                 email: inputs.email
             })
             await setDoc(doc(db, "chatList", userCredential.user.uid), {})
-            if (!userCredential.user.emailVerified) {
-                await sendEmailVerification(auth.currentUser)
-                setEmailSend(true)
-                let intervel = setInterval(async () => {
-                    if (userCredential.user.emailVerified) {
-                        clearInterval(intervel)
-                        navigate("/")
-                    }
-                    await userCredential.user.reload()
-                }, 2000);
-            }
+
+            // await sendEmailVerification(userCredential.user)
+
+            navigate("/")
+
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
-            setInputs({})
+            // setInputs({})
             setLoading(false)
-            setEmailSend(false)
             setError(errorMessage)
         }
     }
     return (
         <div className='w-full h-screen flex items-center justify-center bg-gray-800 text-gray-300'>
             {loading && <Loading />}
-            {emailSend && <VerifyEmail />}
             {error && <Alert error={error} />}
             <div className='max-w-md p-5 flex flex-col gap-5 text-center' onClick={() => setError('')}>
                 <h1 className='text-3xl'>Super Chat</h1>
@@ -66,7 +56,7 @@ function Signup() {
                     <input type="text" placeholder="Name" className="input input-bordered input-md w-full bg-gray-800" name='name' value={inputs.name || ""} onChange={handleInputs} required />
                     <input type="email" placeholder="Email" className="input input-bordered input-md w-full bg-gray-800" name='email' value={inputs.email || ""} onChange={handleInputs} required />
                     <input type="password" placeholder="Password" className="input input-bordered input-md w-full bg-gray-800" name='password' value={inputs.password || ""} onChange={handleInputs} required />
-                    <button className="btn hover:bg-gray-900 bg-gray-900 border-none" type='submit'>Sign up</button>
+                    <button className="btn hover:bg-gray-900 bg-gray-900 border-none">Sign up</button>
                 </form>
                 <div className='flex gap-5 justify-center'>
                     <svg

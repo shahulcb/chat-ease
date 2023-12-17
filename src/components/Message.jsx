@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { ChatContext } from '../context/ChatContext'
 import { AuthContext } from '../context/AuthContext'
+import userAvatar from "../assets/userAvatar.png"
 
 function Message({ message }) {
     console.log(message);
@@ -32,14 +33,16 @@ function Message({ message }) {
                             <>
                                 {user.photoURL === "" ?
                                     <img src={user?.photoURL} alt={user.displayName} className='object-cover' />
-                                    : <span>{user.displayName.substring(0, 2).toUpperCase()}</span>
+                                    :
+                                    <img src={userAvatar} alt={user.displayName} className='object-cover' />
                                 }
                             </>
                         ) : (
                             <>
                                 {data.user?.photoURL === "" ?
                                     <img src={data.user?.photoURL} alt={data.user.displayName} className='object-cover' />
-                                    : <span>{data.user.displayName.substring(0, 2).toUpperCase()}</span>
+                                    :
+                                    <img src={userAvatar} alt={data.user.displayName} className='object-cover' />
                                 }
                             </>
                         )}

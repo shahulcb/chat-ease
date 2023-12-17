@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from '../firebase/config'
 import Loading from '../components/Loading'
-import VerifyEmail from '../components/VerifyEmail'
 import Alert from '../components/Alert'
 
 
@@ -11,7 +10,6 @@ import Alert from '../components/Alert'
 function Login() {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    const [emailSend, setEmailSend] = useState(false)
     const [inputs, setInputs] = useState({})
     const [error, setError] = useState('')
     const handleInputs = (event) => {
@@ -24,35 +22,21 @@ function Login() {
         event.preventDefault()
         try {
             setLoading(true)
-            const userCredential = await signInWithEmailAndPassword(auth, inputs.email, inputs.password)
+            await signInWithEmailAndPassword(auth, inputs.email, inputs.password)
+            navigate("/")
 
-            if (!userCredential.user.emailVerified) {
-                await sendEmailVerification(userCredential.user)
-                setEmailSend(true)
-                let intervel = setInterval(async () => {
-                    if (userCredential.user.emailVerified) {
-                        clearInterval(intervel)
-                        navigate("/")
-                    }
-                    await userCredential.user.reload()
-                }, 2000);
-            } else {
-                navigate("/")
-            }
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
             setInputs({})
             setLoading(false)
-            setEmailSend(false)
             setError(errorMessage)
         }
     }
     return (
         <div className='w-full h-screen flex items-center justify-center bg-gray-800 text-gray-300'>
             {loading && <Loading />}
-            {emailSend && <VerifyEmail />}
             {error && <Alert error={error} />}
             <div className='max-w-md p-5 flex flex-col gap-5 text-center' onClick={() => setError('')}>
                 <h1 className='text-3xl'>Super Chat</h1>

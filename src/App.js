@@ -8,7 +8,7 @@ import { AuthContext } from "./context/AuthContext";
 function App() {
   const { user } = useContext(AuthContext)
   function ProtectedRoute({ children }) {
-    if (user && user.emailVerified) {
+    if (user) {
       return children
     } else {
       return <Navigate to={"/login"} replace />
@@ -16,7 +16,7 @@ function App() {
   }
 
   function UnauthenticatedRoute({ children }) {
-    if (user && user.emailVerified) {
+    if (user) {
       return <Navigate to={"/"} replace />
     } else {
       return children

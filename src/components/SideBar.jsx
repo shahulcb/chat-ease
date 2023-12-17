@@ -2,7 +2,6 @@ import React from 'react'
 import NavBar from './NavBar'
 import Chats from './Chats'
 import { Route, Routes } from 'react-router-dom'
-import Settings from '../pages/Settings'
 import Search from './Search'
 
 function SideBar() {
@@ -16,7 +15,6 @@ function SideBar() {
                         <Chats />
                     </>
                 } />
-                <Route path='/settings' element={<Settings />} />
             </Routes>
         </div>
     )

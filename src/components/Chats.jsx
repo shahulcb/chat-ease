@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { db } from '../firebase/config'
 import { AuthContext } from '../context/AuthContext'
 import { ChatContext } from '../context/ChatContext'
+import userAvatar from "../assets/userAvatar.png"
 
 function Chats() {
     const { user } = useContext(AuthContext)
@@ -10,20 +11,15 @@ function Chats() {
     const { dispatch } = useContext(ChatContext)
     const [chatList, setChatList] = useState([])
     const [loading, setLoading] = useState(true)
-    const [infoMessageStatus, setInfoMesssageStaus] = useState(false)
     useEffect(() => {
-        setInfoMesssageStaus(false)
         const unsub = onSnapshot(doc(db, "chatList", user.uid), (doc) => {
             setChatList(doc.data())
             setLoading(false)
-            if (chatList.length < 1) {
-                setInfoMesssageStaus(true)
-            }
         })
         return () => {
             unsub()
         }
-    }, [user.uid, chatList.length])
+    }, [user.uid])
 
     const handleClick = (userInfo) => {
         dispatch({
@@ -42,10 +38,10 @@ function Chats() {
                         <div className={`flex gap-5 p-3 items-center hover:bg-gray-800 transition-colors cursor-pointer rounded-md relative ${data.user.uid === chat[1].userInfo.uid && "bg-gray-800"}`} key={chat[0]} onClick={() => handleClick(chat[1].userInfo)}>
                             <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
                                 <div className="text-neutral-content rounded-full w-12 bg-gray-800">
-                                    {chat[1].userInfo?.photoURL ?
+                                    {chat[1].userInfo.photoURL ?
                                         <img src={chat[1].userInfo?.photoURL} alt={chat[1].userInfo.displayName} className='object-cover' />
                                         :
-                                        <span>{chat[1].userInfo.displayName.substring(0, 2).toUpperCase()}</span>
+                                        <img src={userAvatar} alt={chat[1].userInfo.displayName} className='object-cover' />
                                     }
                                 </div>
                             </div>
@@ -57,14 +53,6 @@ function Chats() {
                         </div>
                     ))
             }
-            {infoMessageStatus && (
-                <div className='text-center mt-5 text-gray-400 text-lg font-medium'>
-                    <p className=''>
-                        No friends to chat with?
-                    </p>
-                    <p>Find new friends and start a conversation now!</p>
-                </div>
-            )}
             {loading &&
                 (
                     <div className='flex justify-center'>
