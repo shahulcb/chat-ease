@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { db } from '../firebase/config'
 import { AuthContext } from '../context/AuthContext'
 import { ChatContext } from '../context/ChatContext'
-import userAvatar from "../assets/userAvatar.png"
 
 function Chats() {
     const { user } = useContext(AuthContext)
@@ -38,11 +37,7 @@ function Chats() {
                         <div className={`flex gap-5 p-3 items-center hover:bg-gray-800 transition-colors cursor-pointer rounded-md relative ${data.user.uid === chat[1].userInfo.uid && "bg-gray-800"}`} key={chat[0]} onClick={() => handleClick(chat[1].userInfo)}>
                             <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
                                 <div className="text-neutral-content rounded-full w-12 bg-gray-800">
-                                    {chat[1].userInfo.photoURL ?
-                                        <img src={chat[1].userInfo?.photoURL} alt={chat[1].userInfo.displayName} className='object-cover' />
-                                        :
-                                        <img src={userAvatar} alt={chat[1].userInfo.displayName} className='object-cover' />
-                                    }
+                                    <img src={chat[1].userInfo?.photoURL} alt={chat[1].userInfo.displayName} className='object-cover' />
                                 </div>
                             </div>
                             <div>

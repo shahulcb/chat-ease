@@ -4,7 +4,6 @@ import { db } from "../firebase/config"
 import { useContext } from 'react'
 import { AuthContext } from "../context/AuthContext"
 import { v4 as uuid } from 'uuid'
-import userAvatar from "../assets/userAvatar.png"
 
 function Search() {
     const { user } = useContext(AuthContext)
@@ -116,11 +115,7 @@ function Search() {
                         <div className='flex gap-5 items-center'>
                             <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
                                 <div className="bg-gray-800 text-neutral-content rounded-full w-12">
-                                    {element.photoURL ?
-                                        <img src={element.photoURL} alt={element.displayName} className='object-cover' />
-                                        :
-                                        <img src={userAvatar} alt={element.displayName} className='object-cover' />
-                                    }
+                                    <img src={element.photoURL} alt={element.displayName} className='object-cover' />
                                 </div>
                             </div>
                             <span className='text-lg text-gray-300 font-medium'>{element.displayName}</span>

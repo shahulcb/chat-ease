@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase/config'
 import { AuthContext } from '../context/AuthContext'
-import userAvatar from "../assets/userAvatar.png"
 
 function NavBar() {
     const { user } = useContext(AuthContext)
@@ -17,11 +16,7 @@ function NavBar() {
                 <div className="dropdown dropdown-end">
                     <div className="avatar placeholder cursor-pointer" tabIndex={0}>
                         <div className="text-neutral-content rounded-full w-11 bg-gray-800 ring ring-gray-600">
-                            {user.photoURL ?
-                                <img src={user.photoURL} alt={user.displayName} className='object-cover' />
-                                :
-                                <img src={userAvatar} alt={user.displayName} className='object-cover' />
-                            }
+                            <img src={user.photoURL} alt={user.displayName} className='object-cover' />
                         </div>
                     </div>
                     <ul className="mt-4 z-[1] p-2 shadow menu menu-sm dropdown-content bg-gray-800 rounded-md w-32 gap-1 text-gray-300">

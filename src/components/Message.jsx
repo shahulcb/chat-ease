@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { ChatContext } from '../context/ChatContext'
 import { AuthContext } from '../context/AuthContext'
-import userAvatar from "../assets/userAvatar.png"
 
 function Message({ message }) {
     console.log(message);
@@ -30,21 +29,9 @@ function Message({ message }) {
                 <div className="bg-transparent border-0 avatar placeholder cursor-pointer">
                     <div className="bg-gray-700 rounded-full w-12 text-gray-300">
                         {message.senderId === user.uid ? (
-                            <>
-                                {user.photoURL === "" ?
-                                    <img src={user?.photoURL} alt={user.displayName} className='object-cover' />
-                                    :
-                                    <img src={userAvatar} alt={user.displayName} className='object-cover' />
-                                }
-                            </>
+                            <img src={user?.photoURL} alt={user.displayName} className='object-cover' />
                         ) : (
-                            <>
-                                {data.user?.photoURL === "" ?
-                                    <img src={data.user?.photoURL} alt={data.user.displayName} className='object-cover' />
-                                    :
-                                    <img src={userAvatar} alt={data.user.displayName} className='object-cover' />
-                                }
-                            </>
+                            <img src={data.user?.photoURL} alt={data.user.displayName} className='object-cover' />
                         )}
                     </div>
                 </div>

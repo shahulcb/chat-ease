@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth"
-import { auth, db } from '../firebase/config'
+import { auth, db, storage } from '../firebase/config'
 import { doc, setDoc } from "firebase/firestore"
 import Loading from '../components/Loading'
 import Alert from '../components/Alert'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 function Signup() {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [inputs, setInputs] = useState({})
     const [error, setError] = useState('')
+    const [image, setImage] = useState(null)
     const handleInputs = (event) => {
         setInputs(prev => ({
             ...prev,
@@ -22,16 +24,20 @@ function Signup() {
         try {
             setLoading(true)
             const userCredential = await createUserWithEmailAndPassword(auth, inputs.email, inputs.password)
+            const storageRef = ref(storage, userCredential.user.uid)
+            await uploadBytes(storageRef, image)
+            const downloadURL = await getDownloadURL(storageRef)
             await updateProfile(userCredential.user, {
+                photoURL: downloadURL,
                 displayName: inputs.name
             })
             await setDoc(doc(db, "users", userCredential.user.uid), {
                 uid: userCredential.user.uid,
                 displayName: inputs.name,
-                email: inputs.email
+                email: inputs.email,
+                photoURL: downloadURL
             })
             await setDoc(doc(db, "chatList", userCredential.user.uid), {})
-
             // await sendEmailVerification(userCredential.user)
 
             navigate("/")
@@ -56,6 +62,26 @@ function Signup() {
                     <input type="text" placeholder="Name" className="input input-bordered input-md w-full bg-gray-800" name='name' value={inputs.name || ""} onChange={handleInputs} required />
                     <input type="email" placeholder="Email" className="input input-bordered input-md w-full bg-gray-800" name='email' value={inputs.email || ""} onChange={handleInputs} required />
                     <input type="password" placeholder="Password" className="input input-bordered input-md w-full bg-gray-800" name='password' value={inputs.password || ""} onChange={handleInputs} required />
+                    <input type="file" className='hidden' id='file' required onChange={(event) => setImage(event.target.files[0])} />
+                    <div className='flex justify-between px-1'>
+                        <label htmlFor="file" className='text-base font-medium flex items-center gap-3'>
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                height="2em"
+                                width="2em"
+                            >
+                                <path d="M8.998999999999999 9.5 A1.5 1.5 0 0 1 7.499 11 A1.5 1.5 0 0 1 5.999 9.5 A1.5 1.5 0 0 1 8.998999999999999 9.5 z" />
+                                <path d="M10.499 14l-1.5-2-3 4h12l-4.5-6z" />
+                                <path d="M19.999 4h-16c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm-16 14V6h16l.002 12H3.999z" />
+                            </svg>
+                            Add profile image</label>
+                        {image &&
+                            <div className='w-14 h-14'>
+                                <img src={URL.createObjectURL(image)} alt="" />
+                            </div>
+                        }
+                    </div>
                     <button className="btn hover:bg-gray-900 bg-gray-900 border-none">Sign up</button>
                 </form>
                 <div className='flex gap-5 justify-center'>
