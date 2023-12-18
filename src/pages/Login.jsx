@@ -8,7 +8,7 @@ function Login() {
         <div className='w-full h-screen flex items-center justify-center bg-gray-800 text-gray-300'>
             <div className='max-w-md p-5 flex flex-col gap-5 text-center'>
                 <h1 className='text-3xl'>Chat Ease</h1>
-                <p className='text-base'>Chat instantly with [Your App Name] for easy and enjoyable conversations.</p>
+                <p className='text-base'>Chat instantly with <b>Chat Ease</b> for easy and enjoyable conversations.</p>
                 <div className='flex gap-5 justify-center'>
                     <div className='w-full border border-gray-500 p-3 rounded-md flex gap-5 cursor-pointer hover:bg-gray-700' onClick={googleSignin}>
                         <svg
