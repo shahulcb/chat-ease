@@ -20,7 +20,7 @@ export const googleSignin = async () => {
         if (details.isNewUser) {
             await setDoc(doc(db, "users", userCredential.user.uid), {
                 uid: userCredential.user.uid,
-                displayName: userCredential.user.displayName,
+                displayName: userCredential.user.displayName.toLocaleLowerCase(),
                 email: userCredential.user.email,
                 photoURL: userCredential.user.photoURL
             })

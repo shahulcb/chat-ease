@@ -64,8 +64,8 @@ function Search() {
             return false
         }
         const q = query(collection(db, "users"),
-            where("displayName", ">=", event.target.value),
-            where("displayName", "<", event.target.value + "\uf8ff")
+            where("displayName", ">=", event.target.value.toLocaleLowerCase()),
+            where("displayName", "<", event.target.value.toLocaleLowerCase() + "\uf8ff")
         )
         try {
             setSearchData([])
@@ -122,7 +122,7 @@ function Search() {
                             </div>
                             <span className='text-lg text-gray-300 font-medium'>{element.displayName}</span>
                         </div>
-                        <button onClick={() => handleOnClick(element)} className="btn bg-gray-800 border-none hover:bg-gray-700 h-10 min-h-0">Say hi 👋
+                        <button onClick={() => handleOnClick(element)} className="btn bg-gray-800 border-none hover:bg-gray-700 h-10 min-h-0 text-gray-300">Say hi 👋
                         </button>
                     </div>
                 ))

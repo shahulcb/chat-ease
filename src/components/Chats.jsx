@@ -10,9 +10,19 @@ function Chats() {
     const { dispatch } = useContext(ChatContext)
     const [chatList, setChatList] = useState([])
     const [loading, setLoading] = useState(true)
+    const [isData, setIsData] = useState(false)
     useEffect(() => {
         const unsub = onSnapshot(doc(db, "chatList", user.uid), (doc) => {
-            setChatList(doc.data())
+            if (doc.exists()) {
+                if (Object.keys(doc.data()).length > 0) {
+                    setChatList(doc.data())
+                    setIsData(false)
+                } else {
+                    setIsData(true)
+                }
+            } else {
+                setIsData(true)
+            }
             setLoading(false)
         })
         return () => {
@@ -52,6 +62,13 @@ function Chats() {
                 (
                     <div className='flex justify-center'>
                         <span className="loading loading-spinner loading-md"></span>
+                    </div>
+                )
+            }
+            {
+                isData && (
+                    <div className='flex justify-center text-center p-3'>
+                        <p className='max-w-xs text-md font-medium text-gray-300'>You have no friends. Find your friends and start chatting!</p>
                     </div>
                 )
             }
