@@ -7,7 +7,6 @@ This is a real-time chat application built using React, Tailwind CSS, and Fireba
 ## Features
 
 - Real-time chat functionality
-- Multiple chat rooms
 - User authentication using Firebase Authentication
 - Responsive design using Tailwind CSS
 
