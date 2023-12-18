@@ -9,7 +9,7 @@ function NavBar() {
     return (
         <div className="navbar static top-0 p-3">
             <div className="flex-1">
-                <Link to={"/"} className='text-lg font-medium text-gray-300'>Super Chat</Link>
+                <Link to={"/"} className='text-lg font-medium text-gray-300'>Chat Ease</Link>
             </div>
             <div className="flex-none">
                 {/* <h1 className='text-sm font-medium'>@ {user.displayName}</h1> */}

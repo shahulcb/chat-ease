@@ -28,7 +28,8 @@ function Search() {
                 await updateDoc(doc(db, "chatList", user.uid), {
                     [combainedId + ".userInfo"]: {
                         uid: clickedUser.uid,
-                        displayName: clickedUser.displayName
+                        displayName: clickedUser.displayName,
+                        photoURL: clickedUser.photoURL
                     },
                     [combainedId + ".lastMessage"]: {
                         text: "Hi👋"
@@ -38,7 +39,8 @@ function Search() {
                 await updateDoc(doc(db, "chatList", clickedUser.uid), {
                     [combainedId + ".userInfo"]: {
                         uid: user.uid,
-                        displayName: user.displayName
+                        displayName: user.displayName,
+                        photoURL: user.photoURL
                     },
                     [combainedId + ".lastMessage"]: {
                         text: "Hi👋"

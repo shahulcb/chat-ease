@@ -21,7 +21,7 @@ function ChatHeader() {
                 <span className='text-lg font-medium text-gray-300'>{data.user?.displayName}</span>
             </div>
             <div className='flex gap-5'>
-                <svg
+                {/* <svg
                     viewBox="0 0 512 512"
                     fill="white"
                     height="1.5em"
@@ -40,8 +40,8 @@ function ChatHeader() {
                         fillRule="evenodd"
                         d="M0 5a2 2 0 012-2h7.5a2 2 0 011.983 1.738l3.11-1.382A1 1 0 0116 4.269v7.462a1 1 0 01-1.406.913l-3.111-1.382A2 2 0 019.5 13H2a2 2 0 01-2-2V5zm11.5 5.175l3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 00-1 1v6a1 1 0 001 1h7.5a1 1 0 001-1V5a1 1 0 00-1-1H2z"
                     />
-                </svg>
-                <div className="dropdown dropdown-end">
+                </svg> */}
+                {/* <div className="dropdown dropdown-end">
                     <svg
                         viewBox="0 0 24 24"
                         fill="white"
@@ -52,10 +52,10 @@ function ChatHeader() {
                         <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
                     </svg>
                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52 mt-7">
-                        {/* <li><a>Item 1</a></li>
-                        <li><a>Item 2</a></li> */}
+                        <li><a>Item 1</a></li>
+                        <li><a>Item 2</a></li>
                     </ul>
-                </div>
+                </div> */}
             </div>
         </div>
     )
